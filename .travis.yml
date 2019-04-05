@@ -1,0 +1,7 @@
+---
+  sudo: required
+  notifications:
+    email: true
+  language: php
+  script: phpunit --configuration phpunit.xml
+ 

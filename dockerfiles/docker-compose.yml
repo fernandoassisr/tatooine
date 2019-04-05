@@ -1,0 +1,43 @@
+version: '2'
+services:
+
+  php:
+    container_name: php_tatooine
+    # image: php:7.3-fpm
+    build: build/php/fpm-7.3/
+    restart: always
+    ports:
+      - "9000:9000"
+    privileged: true
+    volumes:
+      - /var/www/html:/var/www/html
+    tty: true
+    env_file:
+      - ./.ENV
+    networks:
+      - myapp
+
+  web:
+    container_name: web_tatooine
+    # image: nginx:stable
+    build: build/nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "8088:8088"
+    links:
+      - php
+    privileged: true
+    volumes:
+      - /var/www/html:/var/www/html/
+      - ./log/nginx:/var/log/nginx/
+    env_file:
+      - ./.ENV
+    networks:
+      - myapp
+
+networks:
+  myapp:
+    driver: bridge
+  database:
+    driver: bridge
